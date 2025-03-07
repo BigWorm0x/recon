@@ -1,8 +1,8 @@
-writeups
-What is recon scoping?
+## writeups
+## What is recon scoping?
 Reconnaissance (or recon) scoping is the initial phase of a vulnerability assessment or penetration testing engagement. It involves identifying and gathering information about the target systems, networks, and infrastructure. The primary goal is to understand the scope of the environment to be tested and to gather intelligence that might be useful during subsequent phases of the assessment
-First Step
-subdomain mapping / gathering 
+## First Step
+## subdomain mapping / gathering 
 # passive & active subdomain enumation using subfinder
 subfinder -d gcash.com -o ~/recon/targets/gcash.com/subdomains/subfinder.txt
 ​
@@ -25,24 +25,24 @@ asnmap -d gcash.com | dnsx -silent -resp-only -ptr > ~/recon/targets/gcash.com/s
 # subdomain enumeration via vhost
 cat subdomains-top1million-50000.txt | ffuf -w -:FUZZ -u http://gcash.com/ -H 'Host:FUZZ.gcash.com' -ac
 ​
-second step
+## second step
 after we enumerate subdomains using different tools their are some duplicates subdomains, to optimize the subdomains we will merge it using anew and will it actively remove duplicate subdomains.
 # Merging subdomains from ~/recon/targets/gcash.com/subdomains/* into one file and remove duplicates
 cat ~/recon/targets/gcash.com/subdomains/*.txtanew~/recon/targets/gcash.com/subdomains/subdomains.txt
  
-third step
+## third step
 after we merge subdomains we need to filter live subdomains using httpx to filter https/http on lists of subdomain.
 # Probe for live HTTP/HTTPS servers
 cat ~/recon/targets/gcash.com/subdomains/subdomains.txt | httpx -o ~/recon/targets/gcash.com
 ​
-Fourth step
-Information Gathering:
+## Fourth step
+## Information Gathering:
 after we filter live subdomains we will start a information gathering using httpx to gather infomation about the domains using wappalyzer mapping techniques to identify technologies that are used to websites.
-Five step
+## Five step
 after we gather information about tech we will start using nuclei.
 cat ~/recon/targets/gcash.com/subdomains/httpx.txt | nuclei -config ~/nuclei-templates/config/custom.yml
 ​
-six step
+## six step
 AWS S3 bucket:
 since we see on the httpx that they use aws, lets filter the s3 bucket using nuclei.
 #filter s3 buckets and save to ~/recon/targets/gcash.com/aws/butcket.txt
@@ -61,6 +61,6 @@ on open port scanning i always use naabu, it allows you to enumerate valid ports
 # scan all open ports except on port 80 & 443
 cat ~/recon/targets/gcash.com/subdomains/subdomains.txt | naabu --passive
 ​
-Important Writeups
+## Important Writeups
 firstsight.me​
 CyberIntruder - Molx32CyberIntruder | Blog
